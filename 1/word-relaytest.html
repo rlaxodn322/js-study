@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div><span id="open">1</span>번째 참가자</div>
+    <div>제시어:<span id="example"></span></div>
+    <input type="text" />
+    <button>입력</button>
+    <script>
+      const number = parseInt(prompt("몇명?"));
+      const $button = document.querySelector("button");
+      const $input = document.querySelector("input");
+      const $open = document.querySelector("#open");
+      const $example = document.querySelector("#example");
+      let example;
+      let newExample;
+      if (number) {
+        const onButton = () => {
+          if (!example) {
+            example = newExample;
+            $example.textContent = example;
+          }
+        };
+
+        const onInput = (e) => {
+          newExample(e.target.value);
+        };
+      }
+      $button.addEventListener("click", onButton);
+      $input.addEventListener("input", onInput);
+    </script>
+  </body>
+</html>

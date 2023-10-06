@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form id="form">
+      <input type="text" id="input" />
+      <button>확인</button>
+    </form>
+    <div id="logs"></div>
+    <script>
+      const $input = document.querySelector("#input");
+      const $form = document.querySelector("#form");
+      const $logs = document.querySelector("#logs");
+      const numbers = [];
+      for (let i = 0; i < 9; i++) {
+        numbers.push(i + 1);
+      }
+      const answer = [];
+      for (let i = 0; i < 4; i++) {
+        const index = Math.floor(Math.random() * numbers.length);
+        answer.push(numbers[index]);
+        numbers.splice(index, 1);
+      }
+      console.log(answer);
+
+      const trids = [];
+      function checkInput(input) {
+        if (input.length !== 4) {
+          return alert("4자리 숫자 입력해주세요.");
+        }
+        if (new Set(input).size !== 4) {
+          return alert("중복되지 않게 해주세요.");
+        }
+        if (trids.includes(input)) {
+          return alert("이미 시도한 값입니다.");
+        }
+        return true;
+      }
+      function defeated() {
+        $logs.append(`패배! 정답은 ${answer.join("")}`);
+      }
+
+      let out = 0;
+      $form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const value = $input.value;
+        $input.value = "";
+        if (!checkInput(value)) {
+          return;
+        }
+
+        if (answer.join("") === value) {
+          $logs.textContent = "홈런!";
+          return;
+        }
+        if (trids.length >= 9) {
+          defeated();
+          return;
+        }
+        let strike = 0;
+        let ball = 0;
+        for (let i = 0; i < answer.length; i++) {
+          const index = value.indexOf(answer[i]);
+          if (index > -1) {
+            if (index === i) {
+              strike++;
+            } else {
+              ball++;
+            }
+          }
+        }
+        if (strike === 0 && ball === 0) {
+          out++;
+          $logs.append(`${value}  ${out}번 아웃`, document.createElement("br"));
+          console.log(out);
+        } else {
+          $logs.append(
+            `${value}:${strike} 스트라이크 ${ball} 볼`,
+            document.createElement("br")
+          );
+        }
+        if (out === 3) {
+          defeated();
+          return;
+        }
+
+        trids.push(value);
+      });
+    </script>
+  </body>
+</html>
